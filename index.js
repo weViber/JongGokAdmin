@@ -15,26 +15,27 @@ app.use(cors({
 }));
 
 mongoose.set('strictQuery', true);
+
 const MONGO_URL = process.env.MONGO_URL || 'mongodb+srv://lyncare:fls2022@lyncare.5ip2vsa.mongodb.net/junggok?retryWrites=true&w=majority'
 const PORT = process.env.PORT || 8080
 const db = require("./app/models");
 
 db.mongoose
-  .connect(MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server Start : ${PORT}`);
+    .connect(MONGO_URL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server Start : ${PORT}`);
+        });
+    })
+    .catch(err => {
+        console.error("Connection error", err);
+        process.exit();
     });
-  })
-  .catch(err => {
-    console.error("Connection error", err);
-    process.exit();
-  });
 
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname, '/build/index.html'));
 });
 
@@ -44,6 +45,6 @@ require('./app/routes/admin.routes')(app);
 require('./app/routes/user.routes')(app);
 
 // *
-app.get('*', function (req, res) {
+app.get('*', function(req, res) {
     res.sendFile(path.join(__dirname, '/build/index.html'));
 });
